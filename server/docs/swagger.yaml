@@ -1,0 +1,813 @@
+definitions:
+  apis.Res:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+  apis.loginForm:
+    properties:
+      password:
+        type: string
+      user_name:
+        type: string
+    required:
+    - password
+    - user_name
+    type: object
+  apis.menuForm:
+    properties:
+      component:
+        type: string
+      create_time:
+        type: string
+      hidden:
+        type: integer
+      icon:
+        type: string
+      menu_id:
+        type: integer
+      name:
+        type: string
+      parent_id:
+        type: integer
+      path:
+        type: string
+      permission:
+        type: string
+      redirect:
+        type: string
+      sort:
+        type: integer
+      title:
+        type: string
+      type:
+        type: string
+      update_time:
+        type: string
+    required:
+    - component
+    - icon
+    - name
+    - path
+    - title
+    - type
+    type: object
+  apis.pathForm:
+    properties:
+      create_time:
+        type: string
+      method:
+        type: string
+      name:
+        type: string
+      parent_id:
+        type: integer
+      path:
+        type: string
+      path_id:
+        type: integer
+      type:
+        type: string
+      update_time:
+        type: string
+    required:
+    - name
+    - type
+    type: object
+  apis.roleForm:
+    properties:
+      buttons:
+        items:
+          $ref: '#/definitions/models.Button'
+        type: array
+      create_time:
+        type: string
+      menu_ids:
+        items:
+          type: integer
+        type: array
+      path_ids:
+        items:
+          type: integer
+        type: array
+      remark:
+        type: string
+      role_id:
+        type: integer
+      role_name:
+        type: string
+      status:
+        type: integer
+      update_time:
+        type: string
+    required:
+    - role_name
+    type: object
+  apis.userCreateForm:
+    properties:
+      password:
+        type: string
+      repassword:
+        type: string
+      role_ids:
+        items:
+          type: integer
+        type: array
+      status:
+        type: integer
+      user_name:
+        type: string
+    required:
+    - password
+    - repassword
+    - role_ids
+    - user_name
+    type: object
+  apis.userUpdateForm:
+    properties:
+      role_ids:
+        items:
+          type: integer
+        type: array
+      status:
+        type: integer
+      user_name:
+        type: string
+    required:
+    - role_ids
+    - user_name
+    type: object
+  apis.userUpdatePwdForm:
+    properties:
+      old_password:
+        type: string
+      password:
+        type: string
+      repassword:
+        type: string
+    required:
+    - old_password
+    - password
+    - repassword
+    type: object
+  models.Button:
+    properties:
+      btns:
+        items:
+          type: string
+        type: array
+      menu_id:
+        type: integer
+    type: object
+host: 127.0.0.1:8001
+info:
+  contact: {}
+  description: Go-Admin-Element后端API文档
+  license: {}
+  title: Go-Admin-Element
+paths:
+  /menu:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 菜单数据
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/apis.menuForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"msg":"添加成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 添加菜单
+      tags:
+      - 菜单管理
+  /menu/:menu_id:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":menu,"msg":"获取成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 获取菜单
+      tags:
+      - 菜单管理
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' 菜单数据'
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/apis.menuForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"msg":"修改成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 修改菜单
+      tags:
+      - 菜单管理
+  /menus:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 菜单ID数组
+        in: body
+        name: menu_id
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":null,"msg":"删除成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"删除失败"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 删除菜单
+      tags:
+      - 菜单管理
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":menus,"msg":"获取成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 菜单列表
+      tags:
+      - 菜单管理
+  /path:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 接口数据
+        in: body
+        name: path
+        required: true
+        schema:
+          $ref: '#/definitions/apis.pathForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"msg":"添加成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 添加接口
+      tags:
+      - 接口管理
+  /path/:path_id:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":path,"msg":"获取成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 获取接口
+      tags:
+      - 接口管理
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' 接口数据'
+        in: body
+        name: path
+        required: true
+        schema:
+          $ref: '#/definitions/apis.pathForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"msg":"修改成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 修改接口
+      tags:
+      - 接口管理
+  /paths:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 接口ID数组
+        in: body
+        name: path_id
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":null,"msg":"删除成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"删除失败"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 删除接口
+      tags:
+      - 接口管理
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":paths,"msg":"获取成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 接口列表
+      tags:
+      - 接口管理
+  /role:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 角色数据
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/apis.roleForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"msg":"添加成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 添加角色
+      tags:
+      - 角色管理
+  /role/:role_id:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 角色数据
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/apis.roleForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"msg":"修改成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 修改角色
+      tags:
+      - 角色管理
+  /roles:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 日志ID数组
+        in: body
+        name: role_id
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":null,"msg":"删除成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"删除失败"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 删除角色
+      tags:
+      - 角色管理
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":logs,"msg":"获取成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 获取角色列表
+      tags:
+      - 角色管理
+  /user:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 账号信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/apis.userCreateForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":null,"msg":"添加成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"添加失败"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 添加用户
+      tags:
+      - 用户管理
+  /user/:user_id:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 账号信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/apis.userUpdateForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":null,"msg":"修改成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"修改失败"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 修改用户
+      tags:
+      - 用户管理
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":info,"msg":"获取成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 获取用户信息
+      tags:
+      - 用户管理
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 账号密码
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/apis.loginForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":{token:"token"},"msg":"登录成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 用户登录
+      tags:
+      - 用户管理
+  /user/logs:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 日志ID数组
+        in: body
+        name: userlogid
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":null,"msg":"删除成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"删除失败"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 删除登录日志
+      tags:
+      - 用户管理
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":logs,"msg":"获取成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 获取登录日志列表
+      tags:
+      - 用户管理
+  /user/pwd/:user_id:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 账号密码信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/apis.userUpdatePwdForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":null,"msg":"修改成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"修改失败"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 修改用户密码
+      tags:
+      - 用户管理
+  /users:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 日志ID数组
+        in: body
+        name: userlogid
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":null,"msg":"删除成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"删除失败"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 删除用户
+      tags:
+      - 用户管理
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":0,"data":logs,"msg":"获取成功"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+        "400":
+          description: code":400,"data":null,"msg":"msg"}
+          schema:
+            $ref: '#/definitions/apis.Res'
+      summary: 获取用户列表
+      tags:
+      - 用户管理
+swagger: "2.0"
