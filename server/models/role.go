@@ -1,12 +1,12 @@
 package models
 
 import (
-  orm "element-admin-api/db"
-  "element-admin-api/utils"
-  "element-admin-api/utils/gcasbin"
   "encoding/json"
   "fmt"
   "github.com/jinzhu/gorm"
+  orm "go-element-admin-api/db"
+  "go-element-admin-api/utils"
+  "go-element-admin-api/utils/gcasbin"
   "log"
   "strings"
 )

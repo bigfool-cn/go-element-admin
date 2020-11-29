@@ -10,7 +10,7 @@ export function listRole(params) {
 
 export function getRole(params) {
   return request({
-    url: '/role/get',
+    url: '/role',
     method: 'get',
     params
   })

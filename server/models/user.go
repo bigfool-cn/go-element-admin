@@ -1,10 +1,10 @@
 package models
 
 import (
-  "element-admin-api/utils"
   "github.com/jinzhu/gorm"
-	"log"
-	orm "element-admin-api/db"
+  orm "go-element-admin-api/db"
+  "go-element-admin-api/utils"
+  "log"
 )
 
 type User struct {
@@ -15,7 +15,7 @@ type User struct {
 	UpdateTime   string `gorm:"column:update_time;default:NULL" json:"update_time"`
 	CreateTime   string `gorm:"column:create_time" json:"create_time"`
 
-  Roles []Role `gorm:"association_autoupdate:false;many2many:user_roles;foreignkey:user_id;association_foreignkey:role_id;association_jointable_foreignkey:role_id;jointable_foreignkey:user_id;" json:"roles"`
+  Roles        []Role `gorm:"association_autoupdate:false;many2many:user_roles;foreignkey:user_id;association_foreignkey:role_id;association_jointable_foreignkey:role_id;jointable_foreignkey:user_id;" json:"roles"`
 
 }
 
@@ -35,17 +35,11 @@ type Info struct {
 
 func (u UserView) Create() (err error) {
 
-  tran := orm.Eloquent.Begin()
-
   u.CreateTime = utils.GetCurrntTime()
 
   if err = orm.Eloquent.Table("users").Create(&u).Error; err != nil {
     log.Println(err.Error())
-    tran.Rollback()
-    return
   }
-
-  err = tran.Commit().Error
   return
 }
 
@@ -102,7 +96,7 @@ func (u User) Update() (err error) {
         RoleId:     roleId,
       }
       log.Println("userRoleModel",userRoleModel)
-      if userRoleId, err := userRoleModel.Create(); userRoleId <=0 && err != nil {
+      if err := userRoleModel.Create(); err != nil {
         log.Println(err.Error())
         tran.Rollback()
         return err

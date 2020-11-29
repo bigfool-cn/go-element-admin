@@ -1,12 +1,12 @@
 package routers
 
 import (
-	_ "element-admin-api/docs"
-	"github.com/gin-gonic/gin"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
-	"element-admin-api/apis"
-	"element-admin-api/middlewares"
+  "github.com/gin-gonic/gin"
+  ginSwagger "github.com/swaggo/gin-swagger"
+  "github.com/swaggo/gin-swagger/swaggerFiles"
+  "go-element-admin-api/apis"
+  _ "go-element-admin-api/docs"
+  "go-element-admin-api/middlewares"
 )
 
 func InitRouter() *gin.Engine  {
@@ -21,6 +21,30 @@ func InitRouter() *gin.Engine  {
 	auth := r.Group("/")
 	auth.Use(middlewares.JwtMiddleWare())
 	{
+	  // 博客
+	  blog := auth.Group("blog")
+	  {
+      // 标签管理
+      blog.GET("/tags", apis.BlogTagList)
+      blog.DELETE("/tags", apis.DeleteBlogTag)
+      tag := blog.Group("tag")
+      {
+        tag.POST("", apis.CreateBlogArticle)
+        tag.GET("/:tag_id", apis.GetBlogTag)
+        tag.PUT("/:tag_id", apis.UpdateBlogTag)
+      }
+
+      // 文章管理
+      blog.GET("/articles", apis.BlogArticleList)
+      blog.DELETE("/articles", apis.DeleteBlogArticle)
+      article := blog.Group("article")
+      {
+        article.POST("", apis.CreateBlogArticle)
+        article.GET("/:article_id", apis.GetBlogArticle)
+        article.PUT("/:article_id", apis.UpdateBlogArticle)
+      }
+    }
+
     auth.GET("/user/info", apis.UserInfo)
 	  auth.Use(middlewares.RoleCasbinMiddleWare())
 	  {

@@ -1,6 +1,6 @@
 package apis
 
-import "element-admin-api/models"
+import "go-element-admin-api/models"
 
 type Res struct {
   Code    int `json:"code"`
@@ -58,6 +58,15 @@ type menuForm struct {
 
 type pathForm struct {
   models.Path
+}
+
+type blogTagForm struct {
+  models.BlogTag
+}
+
+type blogArticleForm struct {
+  models.BlogArticle
+  TagIds          []int64 `json:"tag_ids" binding:"required"`
 }
 
 

@@ -1,4 +1,4 @@
-module element-admin-api
+module go-element-admin-api
 
 go 1.13
 

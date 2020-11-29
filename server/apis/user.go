@@ -1,11 +1,11 @@
 package apis
 
 import (
-	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"log"
-	"element-admin-api/models"
-	"element-admin-api/utils"
+  "encoding/json"
+  "github.com/gin-gonic/gin"
+  "go-element-admin-api/models"
+  "go-element-admin-api/utils"
+  "log"
   "strconv"
 )
 
@@ -285,7 +285,7 @@ func UpdatePwdUser(c *gin.Context)  {
 // @accept json
 // @Produce json
 // @Param Authorization header string true "token"
-// @Param userlogid body []int64 true "日志ID数组"
+// @Param user_id body []int64 true "用户ID数组"
 // @Success 200 {object} Res {"code":0,"data":null,"msg":"删除成功"}
 // @Failure 400 {object} Res {"code":400,"data":null,"msg":"删除失败"}
 // @Router /users [delete]
@@ -313,7 +313,7 @@ func DeleteUser(c *gin.Context)  {
 // @accept json
 // @Produce json
 // @Param Authorization header string true "token"
-// @Success 200 {object} Res {"code":0,"data":logs,"msg":"获取成功"}
+// @Success 200 {object} Res {"code":0,"data":users,"msg":"获取成功"}
 // @Failure 400 {object} Res {"code":400,"data":null,"msg":"msg"}
 // @Router /users [get]
 func UserList(c *gin.Context)  {
@@ -376,7 +376,7 @@ func UserLogList(c *gin.Context)  {
 // @accept json
 // @Produce json
 // @Param Authorization header string true "token"
-// @Param userlogid body []int64 true "日志ID数组"
+// @Param user_log_id body []int64 true "日志ID数组"
 // @Success 200 {object} Res {"code":0,"data":null,"msg":"删除成功"}
 // @Failure 400 {object} Res {"code":400,"data":null,"msg":"删除失败"}
 // @Router /user/logs [delete]

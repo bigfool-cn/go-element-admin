@@ -1,10 +1,10 @@
 package models
 
 import (
-  "element-admin-api/utils"
   "github.com/jinzhu/gorm"
-	"log"
-	orm "element-admin-api/db"
+  orm "go-element-admin-api/db"
+  "go-element-admin-api/utils"
+  "log"
 )
 
 type Menu struct {
@@ -45,9 +45,6 @@ func (m Menu) Create() (menuId int64, err error)  {
   m.CreateTime = utils.GetCurrntTime()
   if err = orm.Eloquent.Table("menus").Create(&m).Error; err != nil {
     log.Println(err.Error())
-    if err == gorm.ErrRecordNotFound  {
-      err = nil
-    }
   }
   menuId = m.MenuID
   return

@@ -1,9 +1,9 @@
 package models
 
 import (
-  orm "element-admin-api/db"
-  "element-admin-api/utils"
   "github.com/jinzhu/gorm"
+  orm "go-element-admin-api/db"
+  "go-element-admin-api/utils"
   "log"
 )
 
@@ -39,9 +39,6 @@ func (p Path) Create() (pathId int64, err error)  {
   p.CreateTime = utils.GetCurrntTime()
   if err = orm.Eloquent.Table("paths").Create(&p).Error; err != nil {
     log.Println(err.Error())
-    if err == gorm.ErrRecordNotFound  {
-      err = nil
-    }
   }
   pathId = p.PathID
   return

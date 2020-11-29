@@ -1,9 +1,9 @@
 package apis
 
 import (
-  "element-admin-api/models"
   "encoding/json"
   "github.com/gin-gonic/gin"
+  "go-element-admin-api/models"
   "log"
   "strconv"
 )
@@ -116,7 +116,7 @@ func DeleteRole(c *gin.Context)  {
 // @accept json
 // @Produce json
 // @Param Authorization header string true "token"
-// @Success 200 {object} Res {"code":0,"data":logs,"msg":"获取成功"}
+// @Success 200 {object} Res {"code":0,"data":roles,"msg":"获取成功"}
 // @Failure 400 {object} Res {"code":400,"data":null,"msg":"msg"}
 // @Router /roles [get]
 func RoleList(c *gin.Context)  {

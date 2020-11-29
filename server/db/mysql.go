@@ -5,7 +5,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql" //加载mysql
 	"github.com/jinzhu/gorm"
-	config "element-admin-api/configs"
+	config "go-element-admin-api/configs"
 	"log"
 	"strconv"
 )
@@ -37,7 +37,7 @@ func init() {
 	conn.WriteString(")")
 	conn.WriteString("/")
 	conn.WriteString(database)
-	//conn.WriteString("?charset=utf8&parseTime=True&loc=Local&timeout=1000ms")
+	conn.WriteString("?charset=utf8&parseTime=True&loc=Local&timeout=1000ms")
 
 	log.Println(conn.String())
 

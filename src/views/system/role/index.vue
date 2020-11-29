@@ -106,7 +106,7 @@
     </el-table>
 
     <!-- 添加或修改角色配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="750px">
+    <el-dialog v-el-drag-dialog :title="title" :visible.sync="open" width="750px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="角色名称" prop="role_name">
           <el-input v-model="form.role_name" placeholder="请输入角色名称" />
@@ -129,7 +129,7 @@
           >
             <span slot-scope="{ node, data }" class="custom-tree-node">
               <span>{{ node.label }}</span>
-              <span v-if="data.children === undefined || data.children.length === 0" class="custom-tree-node-btns">
+              <span v-if="data.permission || data.children === undefined || data.children.length === 0" class="custom-tree-node-btns">
                 <span> -- -- </span>
                 <span>
                   <el-checkbox-group v-model="data.buttons" @change="checkBtn(node)">
@@ -176,9 +176,11 @@
 import { listRole, delRole, addRole, updateRole } from '@/api/system/role'
 import { listMenu } from '@/api/system/menu'
 import { listPath } from '@/api/system/path'
+import ElDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   name: 'Role',
+  directives: { ElDragDialog },
   data() {
     return {
       // 遮罩层

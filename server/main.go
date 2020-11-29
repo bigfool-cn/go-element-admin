@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"log"
-	"element-admin-api/configs"
-	"element-admin-api/routers"
+  "github.com/gin-gonic/gin"
+  "go-element-admin-api/configs"
+  "go-element-admin-api/routers"
+  "log"
 )
 
 // @title Go-Admin-Element

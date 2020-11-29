@@ -1,8 +1,8 @@
 package models
 
 import (
-  orm "element-admin-api/db"
-  "element-admin-api/utils"
+  orm "go-element-admin-api/db"
+  "go-element-admin-api/utils"
   "github.com/jinzhu/gorm"
   "log"
 )

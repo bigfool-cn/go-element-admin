@@ -1,8 +1,8 @@
 package apis
 
 import (
-  "element-admin-api/models"
   "github.com/gin-gonic/gin"
+  "go-element-admin-api/models"
   "log"
   "strconv"
 )

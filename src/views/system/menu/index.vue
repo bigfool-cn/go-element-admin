@@ -100,7 +100,7 @@
       </el-table-column>
     </el-table>
     <!-- 添加或修改菜单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px">
+    <el-dialog v-el-drag-dialog :title="title" :visible.sync="open" width="600px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
@@ -206,9 +206,11 @@ import { listMenu, getMenu, delMenu, addMenu, updateMenu } from '@/api/system/me
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import IconSelect from '@/components/IconSelect'
+import ElDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   name: 'Menu',
+  directives: { ElDragDialog },
   components: { Treeselect, IconSelect },
   filters: {
     filterHidden: function(value) {

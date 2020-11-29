@@ -2,11 +2,11 @@ package apis
 
 import (
   "container/list"
-  "element-admin-api/utils"
   "encoding/json"
   "errors"
   "github.com/gin-gonic/gin"
   "github.com/gorilla/websocket"
+  "go-element-admin-api/utils"
   "log"
   "net"
   "net/http"

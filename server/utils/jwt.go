@@ -1,8 +1,8 @@
 package utils
 
 import (
-  "element-admin-api/configs"
   jwt "github.com/dgrijalva/jwt-go"
+  "go-element-admin-api/configs"
   "strings"
   "time"
 )

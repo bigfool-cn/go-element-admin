@@ -55,7 +55,9 @@
     "script-loader": "0.7.2",
     "vue": "2.6.10",
     "vue-router": "3.0.2",
-    "vuex": "3.1.0"
+    "vuex": "3.1.0",
+    "@tinymce/tinymce-vue": "^2.1.0",
+    "tinymce": "^5.0.12"
   },
   "devDependencies": {
     "babel-plugin-dynamic-import-node": "2.3.0",

@@ -3,7 +3,7 @@ application:
   host: 127.0.0.1
   isinit: false
   jwtsecret: go-vue.usenav.com
-  name: go-element-admin-api
+  name: go-go-element-admin-api
   port: 8001
 database:
   database: go-element-admin

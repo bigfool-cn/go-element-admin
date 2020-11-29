@@ -25,7 +25,7 @@ export function filterAsyncRoutes(routes) {
       tmp.meta.icon = route.icon
     }
     if (tmp.children) {
-      if (tmp.children.length) {
+      if (tmp.children.length === 1) {
         tmp.alwaysShow = true
       }
       tmp.children = filterAsyncRoutes(tmp.children)
