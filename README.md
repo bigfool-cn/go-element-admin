@@ -1,10 +1,10 @@
 ## 简介
 
-[go-element-admin](https://go-vue.usenav.com) 是一个后台前端解决方案，它基于 [vue](https://github.com/vuejs/vue) 、 [element-ui](https://github.com/ElemeFE/element)、[golang](https://golang.org/)、[gorm](https://gorm.io/)、[casbin](https://casbin.org)实现。它使用了最新的前端技术栈，内置了动态路由，权限验证以及接口验证，并提供了简单的后端API服务，开箱即用，帮助你快速构建前后端分离动态路由和权限模型。
+[go-element-admin](https://go-vue.bigfool.cn) 是一个后台前端解决方案，它基于 [vue](https://github.com/vuejs/vue) 、 [element-ui](https://github.com/ElemeFE/element)、[golang](https://golang.org/)、[gorm](https://gorm.io/)、[casbin](https://casbin.org)实现。它使用了最新的前端技术栈，内置了动态路由，权限验证以及接口验证，并提供了简单的后端API服务，开箱即用，帮助你快速构建前后端分离动态路由和权限模型。
 
 本项目通过[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)精简改造，移除了大部分组件，如需要其他组件，可前往搬运。
 
-- [在线预览](https://go-vue.usenav.com)
+- [在线预览](https://go-vue.bigfool.cn)
 
 - [github仓库](https://gitgub.com/bigfool-cn/go-element-admin)
 
