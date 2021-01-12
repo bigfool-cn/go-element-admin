@@ -1,10 +1,9 @@
 package models
 
 import (
-  "element-admin-api/utils"
   "github.com/jinzhu/gorm"
-	"log"
-	orm "element-admin-api/db"
+  orm "go-element-admin/db"
+  "go-element-admin/utils"
 )
 
 type User struct {
@@ -40,7 +39,6 @@ func (u UserView) Create() (err error) {
   u.CreateTime = utils.GetCurrntTime()
 
   if err = orm.Eloquent.Table("users").Create(&u).Error; err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
@@ -61,7 +59,6 @@ func (u User) Update() (err error) {
   tran := orm.Eloquent.Begin()
 
   if user, err = u.GetUserRoleByUserId(u.UserId); err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
@@ -76,13 +73,11 @@ func (u User) Update() (err error) {
   // 删除取消的用户角色
   delRoleIds, err := utils.Difference(oldRoleIds,newRoleIds)
   if err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return err
   }
   if len(delRoleIds.([]int64)) > 0 {
     if err := userRoleModel.Delete(u.UserId,delRoleIds.([]int64)); err != nil {
-      log.Println(err.Error())
       tran.Rollback()
       return err
     }
@@ -91,7 +86,6 @@ func (u User) Update() (err error) {
   // 添加新的用户角色
   addRoleIds, err := utils.Difference(newRoleIds,oldRoleIds)
   if err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return err
   }
@@ -101,9 +95,7 @@ func (u User) Update() (err error) {
         UserId:     u.UserId,
         RoleId:     roleId,
       }
-      log.Println("userRoleModel",userRoleModel)
       if userRoleId, err := userRoleModel.Create(); userRoleId <=0 && err != nil {
-        log.Println(err.Error())
         tran.Rollback()
         return err
       }
@@ -111,7 +103,6 @@ func (u User) Update() (err error) {
   }
 
   if err = orm.Eloquent.Table("users").Omit("create_time").Save(&u).Error; err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
@@ -121,9 +112,7 @@ func (u User) Update() (err error) {
 }
 
 func (u User) UpdatePwd(password string) (err error) {
-  if err = orm.Eloquent.Table("users").Where("user_id = ?",u.UserId).Updates(map[string]interface{}{"password":password}).Error; err != nil{
-    log.Println(err.Error())
-  }
+  err = orm.Eloquent.Table("users").Where("user_id = ?",u.UserId).Updates(map[string]interface{}{"password":password}).Error
   return
 }
 
@@ -131,17 +120,14 @@ func (u User) UpdatePwd(password string) (err error) {
 func (u User) Delete(userIds []int64) (err error)  {
   tran := orm.Eloquent.Begin()
   if err = orm.Eloquent.Table("users").Where("user_id in (?)",userIds).Delete(&u).Error; err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
   if err = orm.Eloquent.Table("user_logs").Where("user_id in (?)",userIds).Delete(&u).Error; err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
   if err = orm.Eloquent.Table("user_roles").Where("user_id in (?)",userIds).Delete(&u).Error; err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
@@ -152,7 +138,6 @@ func (u User) Delete(userIds []int64) (err error)  {
 //获取用户
 func (u User) GetUser() (user UserView, err error)  {
 	if err = orm.Eloquent.Table("users").Preload("Roles").Where(&u).Take(&user).Error; err != nil{
-		log.Println(err.Error())
 		if err == gorm.ErrRecordNotFound  {
 			err = nil
 		}
@@ -163,7 +148,6 @@ func (u User) GetUser() (user UserView, err error)  {
 // 根据user_id 获取用户
 func (u User) GetUserByUserId(userId int64) (user UserView, err error)  {
 	if err = orm.Eloquent.Table("users").Preload("Roles").Take(&user,userId).Error; err != nil {
-		log.Println(err.Error())
 		if err == gorm.ErrRecordNotFound  {
 			err = nil
 		}
@@ -174,7 +158,6 @@ func (u User) GetUserByUserId(userId int64) (user UserView, err error)  {
 // 根据user_name获取用户
 func (u User) GetUserByUserName(useName string) (user UserView, err error)  {
 	if err = orm.Eloquent.Table("users").Preload("Roles").Where("user_name = ?",useName).Take(&user).Error; err != nil {
-		log.Println(err.Error())
 		if err == gorm.ErrRecordNotFound  {
 			err = nil
 		}
@@ -184,7 +167,6 @@ func (u User) GetUserByUserName(useName string) (user UserView, err error)  {
 
 func (u User) GetUserRoleByUserId(userId int64) (user User, err error)  {
 	if err = orm.Eloquent.Model(user).Preload("Roles").Take(&user,userId).Error; err != nil {
-		log.Println(err.Error())
 		if err == gorm.ErrRecordNotFound  {
 			err = nil
 		}
@@ -202,7 +184,6 @@ func (u User) GetUserPage(pageSize int, pageIndex int, userName string, status i
     table = table.Where("users.status = ?",status)
   }
   if err = table.Offset((pageIndex -1) * pageSize).Limit(pageSize).Order("users.create_time desc").Find(&users).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }

@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-  "element-admin-api/utils/gcasbin"
+  "go-element-admin/utils/gcasbin"
   "github.com/gin-gonic/gin"
   "strings"
 )

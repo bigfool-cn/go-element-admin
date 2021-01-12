@@ -1,9 +1,8 @@
 package apis
 
 import (
-  "element-admin-api/models"
   "github.com/gin-gonic/gin"
-  "log"
+  "go-element-admin/models"
   "strconv"
 )
 
@@ -28,7 +27,7 @@ func GetMenu(c *gin.Context)  {
 
   menu, err := menuModel.GetMenu()
   if err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("获取菜单失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"获取失败"})
     return
   }
@@ -55,7 +54,7 @@ func CreateMenu (c *gin.Context){
   }
 
   if _,err := menuModel.Create(); err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("创建菜单失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"添加失败"})
     return
   }
@@ -89,6 +88,7 @@ func UpdateMenu (c *gin.Context){
   menuModel.MenuID = menuId
 
   if err := menuModel.Update(); err != nil {
+    lgr.Errorf("修改菜单失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"修改失败"})
     return
   }
@@ -117,6 +117,7 @@ func DeleteMenu(c *gin.Context)  {
     menuModel models.Menu
   )
   if err := menuModel.Delete(menuIds); err != nil {
+    lgr.Errorf("删除菜单失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"删除失败"})
     return
   }
@@ -139,7 +140,7 @@ func MenuList(c *gin.Context)  {
 
   menus, err := menuModel.GetTreeMenus()
   if err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("获取菜单列表失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"获取数据失败"})
     return
   }

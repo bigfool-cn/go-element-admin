@@ -1,10 +1,9 @@
 package models
 
 import (
-  "element-admin-api/utils"
   "github.com/jinzhu/gorm"
-	"log"
-	orm "element-admin-api/db"
+  orm "go-element-admin/db"
+  "go-element-admin/utils"
 )
 
 type Menu struct {
@@ -32,7 +31,6 @@ type TreeMenu struct {
 // 获取菜单
 func (m Menu) GetMenu() (menu Menu, err error)  {
 	if err = orm.Eloquent.Table("menus").Where(&m).First(&menu).Error; err != nil {
-		log.Println(err.Error())
 		if err == gorm.ErrRecordNotFound  {
 			err = nil
 		}
@@ -44,7 +42,6 @@ func (m Menu) GetMenu() (menu Menu, err error)  {
 func (m Menu) Create() (menuId int64, err error)  {
   m.CreateTime = utils.GetCurrntTime()
   if err = orm.Eloquent.Table("menus").Create(&m).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }
@@ -56,18 +53,14 @@ func (m Menu) Create() (menuId int64, err error)  {
 // 修改菜单
 func (m Menu) Update() (err error) {
   m.UpdateTime = utils.GetCurrntTime()
-  if err = orm.Eloquent.Table("menus").Omit("create_time").Save(&m).Error; err != nil {
-    log.Println(err.Error())
-  }
+  err = orm.Eloquent.Table("menus").Omit("create_time").Save(&m).Error
   return
 }
 
 
 // 删除菜单
 func (m Menu) Delete(menuIds []int64)(err error)  {
-  if err = orm.Eloquent.Table("menus").Where("menu_id in (?)",menuIds).Delete(&m).Error; err != nil {
-    log.Println(err.Error())
-  }
+  err = orm.Eloquent.Table("menus").Where("menu_id in (?)",menuIds).Delete(&m).Error;
   return
 }
 
@@ -75,7 +68,6 @@ func (m Menu) Delete(menuIds []int64)(err error)  {
 // 根据菜单ID切片获取菜单
 func (m Menu) GetMenuByIDs(menuIds []int64) (menus []Menu, err error)  {
 	if err = orm.Eloquent.Table("menus").Where("menu_id in (?)",menuIds).Find(&menus).Error; err != nil {
-		log.Println(err.Error())
 		if err == gorm.ErrRecordNotFound  {
 			err = nil
 		}
@@ -85,7 +77,6 @@ func (m Menu) GetMenuByIDs(menuIds []int64) (menus []Menu, err error)  {
 
 func (m Menu) GetTreeMenus() (menus []TreeMenu, err error) {
   if err = orm.Eloquent.Table("menus").Where(&m).Order("parent_id asc").Order("sort desc").Find(&menus).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }
@@ -98,7 +89,6 @@ func (m Menu) GetTreeMenus() (menus []TreeMenu, err error) {
 
 func (m Menu) GetTreeMenuByIds(menuIds []int64) (menus []TreeMenu, err error) {
 	if err = orm.Eloquent.Table("menus").Where("menu_id in (?)",menuIds).Order("sort desc").Find(&menus).Error; err != nil {
-		log.Println(err.Error())
 		if err == gorm.ErrRecordNotFound  {
 			err = nil
 		}

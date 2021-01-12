@@ -1,6 +1,11 @@
 package apis
 
-import "element-admin-api/models"
+import (
+  "go-element-admin/models"
+  "go-element-admin/utils"
+)
+
+var lgr = utils.DefaultLogger(false)
 
 type Res struct {
   Code    int `json:"code"`
@@ -10,8 +15,8 @@ type Res struct {
 
 // 登录表单
 type loginForm struct {
-	UserName string `json:"user_name" binding:"required"`
-	Password string `json:"password"  binding:"required"`
+  UserName string `json:"user_name" binding:"required"`
+  Password string `json:"password"  binding:"required"`
 }
 
 // 登录账号信息
@@ -59,5 +64,3 @@ type menuForm struct {
 type pathForm struct {
   models.Path
 }
-
-

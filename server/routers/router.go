@@ -1,12 +1,12 @@
 package routers
 
 import (
-	_ "element-admin-api/docs"
+	_ "go-element-admin/docs"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-	"element-admin-api/apis"
-	"element-admin-api/middlewares"
+	"go-element-admin/apis"
+	"go-element-admin/middlewares"
 )
 
 func InitRouter() *gin.Engine  {

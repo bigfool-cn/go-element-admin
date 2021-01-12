@@ -1,7 +1,7 @@
 package gcasbin
 
 import (
-  config "element-admin-api/configs"
+  config "go-element-admin/configs"
   "github.com/casbin/casbin/v2"
   "github.com/casbin/casbin/v2/model"
   gormadapter "github.com/casbin/gorm-adapter/v3"

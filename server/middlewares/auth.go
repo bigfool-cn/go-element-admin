@@ -1,20 +1,20 @@
 package middlewares
 
 import (
-	"github.com/gin-gonic/gin"
-	"log"
-	"net/http"
+  "github.com/gin-gonic/gin"
+  "go-element-admin/apis"
+  "go-element-admin/utils"
+  "net/http"
   "strings"
   "time"
-	"element-admin-api/apis"
-	"element-admin-api/utils"
 )
+
+var lgr = utils.DefaultLogger(false)
 
 // 验证jwt令牌
 func JwtMiddleWare() gin.HandlerFunc  {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
-		log.Println("token",token)
 		if token == "" {
 			c.JSON(http.StatusUnauthorized,apis.Res{Code:401,Message:"token不可用"})
 			c.Abort()
@@ -22,7 +22,7 @@ func JwtMiddleWare() gin.HandlerFunc  {
 		} else {
 			claims, err := utils.Jwt.ParseToken(token)
 			if err != nil {
-				log.Println(err.Error())
+        lgr.Errorf("解析token失败：%v",err.Error())
 				c.JSON(http.StatusUnauthorized,apis.Res{Code:401,Message:"token不可用"})
 				c.Abort()
 				return

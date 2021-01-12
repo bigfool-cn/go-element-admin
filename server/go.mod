@@ -1,4 +1,4 @@
-module element-admin-api
+module go-element-admin
 
 go 1.13
 
@@ -14,6 +14,7 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/gorm v1.9.14
 	github.com/mailru/easyjson v0.7.6 // indirect
+	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/viper v1.7.0
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.7

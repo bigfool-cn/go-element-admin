@@ -1,9 +1,8 @@
 package models
 
 import (
-  orm "element-admin-api/db"
-  "element-admin-api/utils"
-  "log"
+  orm "go-element-admin/db"
+  "go-element-admin/utils"
 )
 
 type UserRole struct {
@@ -16,9 +15,7 @@ type UserRole struct {
 // 创建用户角色
 func (ur UserRole) Create() (id int64, err error) {
   ur.CreateTime = utils.GetCurrntTime()
-  if err = orm.Eloquent.Table("user_roles").Create(&ur).Error; err != nil {
-    log.Println(err.Error())
-  }
+  err = orm.Eloquent.Table("user_roles").Create(&ur).Error
   id = ur.UserRoleID
   return
 }
@@ -26,9 +23,7 @@ func (ur UserRole) Create() (id int64, err error) {
 
 // 删除用户角色
 func (ur UserRole) Delete(userId int64,roleIds []int64)(err error)  {
-  if err = orm.Eloquent.Table("user_roles").Where("user_id = ?",userId).Where("role_id in (?)",roleIds).Delete(&ur).Error; err != nil {
-    log.Println(err.Error())
-  }
+  err = orm.Eloquent.Table("user_roles").Where("user_id = ?",userId).Where("role_id in (?)",roleIds).Delete(&ur).Error
   return
 }
 

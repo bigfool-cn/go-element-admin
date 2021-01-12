@@ -1,28 +1,29 @@
 package database
 
 import (
-	"bytes"
-	"fmt"
-	_ "github.com/go-sql-driver/mysql" //加载mysql
-	"github.com/jinzhu/gorm"
-	config "element-admin-api/configs"
-	"log"
-	"strconv"
+  "bytes"
+  _ "github.com/go-sql-driver/mysql" //加载mysql
+  "github.com/jinzhu/gorm"
+  "go-element-admin/configs"
+  "go-element-admin/utils"
+  "strconv"
 )
 
 var Eloquent *gorm.DB
 
+var lgr = utils.DefaultLogger(false)
+
 func init() {
 
-	dbType := config.DatabaseConfig.Dbtype
-	host := config.DatabaseConfig.Host
-	port := config.DatabaseConfig.Port
-	database := config.DatabaseConfig.Database
-	username := config.DatabaseConfig.Username
-	password := config.DatabaseConfig.Password
+	dbType := configs.DatabaseConfig.Dbtype
+	host := configs.DatabaseConfig.Host
+	port := configs.DatabaseConfig.Port
+	database := configs.DatabaseConfig.Database
+	username := configs.DatabaseConfig.Username
+	password := configs.DatabaseConfig.Password
 
 	if dbType != "mysql" {
-		fmt.Println("db type unknow")
+    lgr.Error("db type unknow")
 	}
 	var err error
 
@@ -37,9 +38,9 @@ func init() {
 	conn.WriteString(")")
 	conn.WriteString("/")
 	conn.WriteString(database)
-	//conn.WriteString("?charset=utf8&parseTime=True&loc=Local&timeout=1000ms")
+	conn.WriteString("?charset=utf8&parseTime=True&loc=Local&timeout=1000ms")
 
-	log.Println(conn.String())
+  lgr.Println(conn.String())
 
 	var db Database
 	if dbType == "mysql" {
@@ -49,16 +50,17 @@ func init() {
 	}
 
 	Eloquent, err = db.Open(dbType, conn.String())
-	Eloquent.LogMode(true)
+
+	Eloquent.LogMode(configs.ApplicationConfig.Debug)
 
 	if err != nil {
-		log.Fatalln("mysql connect error %v", err)
+    lgr.Errorf("mysql connect error %v", err)
 	} else {
-		log.Println("mysql connect success!")
+    lgr.Println("mysql connect success!")
 	}
 
 	if Eloquent.Error != nil {
-		log.Fatalln("database error %v", Eloquent.Error)
+    lgr.Errorf("database error %v", Eloquent.Error)
 	}
 
 }

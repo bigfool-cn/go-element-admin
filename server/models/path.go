@@ -1,10 +1,9 @@
 package models
 
 import (
-  orm "element-admin-api/db"
-  "element-admin-api/utils"
   "github.com/jinzhu/gorm"
-  "log"
+  orm "go-element-admin/db"
+  "go-element-admin/utils"
 )
 
 type Path struct {
@@ -26,7 +25,6 @@ type TreePath struct {
 // 获取接口
 func (p Path) GetPath() (path Path, err error)  {
   if err = orm.Eloquent.Table("paths").Where(&p).First(&path).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }
@@ -38,7 +36,6 @@ func (p Path) GetPath() (path Path, err error)  {
 func (p Path) Create() (pathId int64, err error)  {
   p.CreateTime = utils.GetCurrntTime()
   if err = orm.Eloquent.Table("paths").Create(&p).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }
@@ -50,18 +47,14 @@ func (p Path) Create() (pathId int64, err error)  {
 // 修改接口
 func (p Path) Update() (err error) {
   p.UpdateTime = utils.GetCurrntTime()
-  if err = orm.Eloquent.Table("paths").Omit("create_time").Save(&p).Error; err != nil {
-    log.Println(err.Error())
-  }
+  err = orm.Eloquent.Table("paths").Omit("create_time").Save(&p).Error
   return
 }
 
 
 // 删除接口
 func (p Path) Delete(pathIds []int64)(err error)  {
-  if err = orm.Eloquent.Table("paths").Where("path_id in (?)",pathIds).Delete(&p).Error; err != nil {
-    log.Println(err.Error())
-  }
+  err = orm.Eloquent.Table("paths").Where("path_id in (?)",pathIds).Delete(&p).Error
   return
 }
 
@@ -69,7 +62,6 @@ func (p Path) Delete(pathIds []int64)(err error)  {
 // 根据接口ID切片获取接口
 func (p Path) GetPathByIDs(pathIds []int64) (paths []Path, err error)  {
   if err = orm.Eloquent.Table("paths").Where("path_id in (?)",pathIds).Find(&paths).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }
@@ -79,7 +71,6 @@ func (p Path) GetPathByIDs(pathIds []int64) (paths []Path, err error)  {
 
 func (p Path) GetTreePaths() (paths []TreePath, err error) {
   if err = orm.Eloquent.Table("paths").Where(&p).Order("parent_id asc").Find(&paths).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }
@@ -92,7 +83,6 @@ func (p Path) GetTreePaths() (paths []TreePath, err error) {
 
 func (p Path) GetTreePathByIds(pathIds []int64) (paths []TreePath, err error) {
   if err = orm.Eloquent.Table("paths").Where("path_id in (?)",pathIds).Find(&paths).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }

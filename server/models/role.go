@@ -1,13 +1,12 @@
 package models
 
 import (
-  orm "element-admin-api/db"
-  "element-admin-api/utils"
-  "element-admin-api/utils/gcasbin"
   "encoding/json"
   "fmt"
   "github.com/jinzhu/gorm"
-  "log"
+  orm "go-element-admin/db"
+  "go-element-admin/utils"
+  "go-element-admin/utils/gcasbin"
   "strings"
 )
 
@@ -47,7 +46,6 @@ func (r Role) GetRole() (RoleView, error)  {
     err error
   )
   if err = orm.Eloquent.Table("roles").Where(&r).Take(&role).Error; err != nil{
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }
@@ -62,7 +60,6 @@ func (r Role) Create() (roleId int64, err error) {
   tran := orm.Eloquent.Begin()
   if err = orm.Eloquent.Table("roles").Create(&r).Error; err != nil {
     tran.Rollback()
-    log.Println(err.Error())
   }
   if len(r.PathIds) > 0 {
     var (
@@ -70,7 +67,6 @@ func (r Role) Create() (roleId int64, err error) {
       pathIds   []int64
     )
     if err := json.Unmarshal([] byte(r.PathIds),&pathIds);err != nil {
-      log.Println(err.Error())
       tran.Rollback()
     }
     paths, err := pathModel.GetPathByIDs(pathIds)
@@ -103,7 +99,6 @@ func (r Role) Update() (err error) {
   r.UpdateTime = utils.GetCurrntTime()
   tran := orm.Eloquent.Begin()
   if err = orm.Eloquent.Table("roles").Omit("create_time").Save(&r).Error; err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
@@ -113,7 +108,6 @@ func (r Role) Update() (err error) {
       pathIds   []int64
     )
     if err := json.Unmarshal([] byte(r.PathIds),&pathIds);err != nil {
-      log.Println(err.Error())
       tran.Rollback()
     }
     paths, err := pathModel.GetPathByIDs(pathIds)
@@ -144,12 +138,10 @@ func (r Role) Update() (err error) {
 func (r Role) Delete(roleIds []int64)(err error)  {
   tran := orm.Eloquent.Begin()
   if err = orm.Eloquent.Table("roles").Where("role_id in (?)",roleIds).Delete(&r).Error; err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
   if err = orm.Eloquent.Table("user_roles").Where("role_id in (?)",roleIds).Delete(&r).Error; err != nil {
-    log.Println(err.Error())
     tran.Rollback()
     return
   }
@@ -177,7 +169,6 @@ func (r Role) GetRolePage(pageSize int, pageIndex int, roleName string, status i
     table = table.Where("status = ?",status)
   }
   if err = table.Offset((pageIndex -1) * pageSize).Limit(pageSize).Order("create_time desc").Find(&roles).Error; err != nil {
-    log.Println(err.Error())
     if err == gorm.ErrRecordNotFound  {
       err = nil
     }

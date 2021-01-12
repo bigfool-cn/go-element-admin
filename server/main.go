@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"log"
-	"element-admin-api/configs"
-	"element-admin-api/routers"
+	"go-element-admin/configs"
+	"go-element-admin/routers"
 )
 
 // @title Go-Admin-Element
@@ -12,7 +12,11 @@ import (
 // @host 127.0.0.1:8001
 // @BasePath
 func main()  {
-	gin.SetMode(gin.DebugMode)
+  if configs.ApplicationConfig.Debug {
+    gin.SetMode(gin.DebugMode)
+  } else {
+    gin.SetMode(gin.ReleaseMode)
+  }
 	r := routers.InitRouter()
 	if err := r.Run(configs.ApplicationConfig.Host + ":" + configs.ApplicationConfig.Port); err != nil {
 		log.Fatal(err)

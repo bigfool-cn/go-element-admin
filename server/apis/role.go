@@ -1,10 +1,9 @@
 package apis
 
 import (
-  "element-admin-api/models"
   "encoding/json"
   "github.com/gin-gonic/gin"
-  "log"
+  "go-element-admin/models"
   "strconv"
 )
 
@@ -36,6 +35,7 @@ func CreateRole (c *gin.Context){
     Buttons:    string(buttons),
   }
   if _,err := roleModel.Create(); err != nil {
+    lgr.Errorf("添加角色失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"添加失败"})
     return
   }
@@ -77,6 +77,7 @@ func UpdateRole (c *gin.Context){
     Buttons:    string(buttons),
   }
   if err := roleModel.Update(); err != nil {
+    lgr.Errorf("修改角色失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"修改失败"})
     return
   }
@@ -104,6 +105,7 @@ func DeleteRole(c *gin.Context)  {
     roleModel models.Role
   )
   if err := roleModel.Delete(roleIds); err != nil {
+    lgr.Errorf("删除角色失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"删除失败"})
     return
   }
@@ -132,7 +134,7 @@ func RoleList(c *gin.Context)  {
   roleName := c.DefaultQuery("role_name","")
   status, _ := strconv.Atoi(c.DefaultQuery("status","-1"))
   if role, count, err = roleModel.GetRolePage(pageSize,pageIndex,roleName,status); err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("获取角色列表失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"获取失败"})
     return
   }

@@ -2,12 +2,11 @@ package apis
 
 import (
   "container/list"
-  "element-admin-api/utils"
   "encoding/json"
   "errors"
   "github.com/gin-gonic/gin"
   "github.com/gorilla/websocket"
-  "log"
+  "go-element-admin/utils"
   "net"
   "net/http"
   "strconv"
@@ -25,12 +24,6 @@ const (
 	// 单个ip链接数限制
 	ipLimit = 50
 )
-
-type userAction interface {
-	getName()(string,*list.Element)
-	userJoin(name string,wsConn *wsConnection)
-	userLeave(name string,wsConn *wsConnection)
-}
 
 type user struct {}
 
@@ -106,8 +99,7 @@ func Chat(c *gin.Context)  {
 	token := c.Query("token")
 	tokenInfo, er := utils.Jwt.ParseToken(token)
 	if er != nil {
-    log.Println("token", token)
-		log.Println("token验证失败", er.Error())
+    lgr.Errorf("token验证失败: %v", er.Error())
 		http.Error(c.Writer,"token error",401)
 		return
 	}
@@ -120,13 +112,12 @@ func Chat(c *gin.Context)  {
 	// 应答客户端告知升级连接为ws
 	wsScoket,err := upgrader.Upgrade(c.Writer,c.Request,nil)
 	if err != nil {
-		log.Println("升级为ws失败", err.Error())
+		lgr.Errorf("升级为ws失败: %v", err.Error())
 		return
 	}
 
 	connIpAll[ip] += 1
 	maxConnId++
-	log.Println("当前IP链接数",connIpAll)
 	us = new(user)
 
 	var stringBuild strings.Builder
@@ -164,13 +155,12 @@ func (u *user) userJoin(name string, wsConn *wsConnection)  {
 	for _, wsc := range wsConnAll {
 		names = append(names,wsc.name)
 	}
-	log.Println("在线用户",names)
 
 	// 回复自己分配的名称
 	meMsg := &userMessage{TypeId:1,Name:"system",Msg:name}
 	err := wsConn.wsWrite(meMsg)
 	if err != nil {
-		log.Println("回复自己分配的名称错误",err.Error())
+    lgr.Errorf("回复自己分配的名称错误: %v",err.Error())
 	}
 
 	// 广播加入用户
@@ -202,7 +192,7 @@ func (wsConn *wsConnection) wsReadLoop() {
 		err := wsConn.wsSocket.ReadJSON(userMsg)
 		if err != nil {
 			websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure)
-			log.Println("消息读取出现错误", err.Error())
+      lgr.Errorf("消息读取出现错误: %v", err.Error())
 			wsConn.close()
 			return
 		}
@@ -217,7 +207,7 @@ func (wsConn *wsConnection) wsReadLoop() {
 			}
 			err := wsConn.wsWrite(userMsg)
 			if err != nil {
-				log.Println("发送消息失败",err)
+        lgr.Errorf("发送消息失败: %v",err)
 			}
 		} else {
 			wsConn.sendTime = time.Now()
@@ -240,18 +230,17 @@ func (wsConn *wsConnection) wsWriteLoop()  {
 		case userMsg := <- wsConn.outChan:
 			msg ,er := json.Marshal(userMsg)
 			if er != nil {
-				log.Println("解析发送消息JSON失败", er.Error())
+        lgr.Errorf("解析发送消息JSON失败: %v", er.Error())
 			}
-			log.Println("发送消息",string(msg))
 			if err := wsConn.wsSocket.WriteJSON(string(msg)); err != nil {
-				log.Println("发送消息给客户端发生错误", err.Error())
+        lgr.Errorf("发送消息给客户端发生错误: %v", err.Error())
 				// 切断服务
 				wsConn.close()
 				return
 			}
 		case <- tick.C:
 			if err := wsConn.wsSocket.WriteControl(websocket.PingMessage, []byte(""), time.Now().Add(30 * time.Second));err != nil {
-				log.Println("ping error", err.Error())
+        lgr.Errorf("ping error: %v", err.Error())
 			}
 
 		case <-wsConn.closeChan:
@@ -293,7 +282,6 @@ func (wsConn *wsConnection) wsRead() (*userMessage, error) {
 
 // 关闭连接
 func (wsConn *wsConnection) close() {
-	log.Println("关闭连接被调用了",wsConn.name)
 	wsConn.wsSocket.Close()
 
 	wsConn.mutex.Lock()

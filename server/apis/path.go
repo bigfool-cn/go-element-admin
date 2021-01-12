@@ -1,9 +1,8 @@
 package apis
 
 import (
-  "element-admin-api/models"
   "github.com/gin-gonic/gin"
-  "log"
+  "go-element-admin/models"
   "strconv"
 )
 
@@ -28,7 +27,7 @@ func GetPath(c *gin.Context)  {
 
   path, err := pathModel.GetPath()
   if err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("获取接口失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"获取失败"})
     return
   }
@@ -66,7 +65,7 @@ func CreatePath (c *gin.Context){
   }
 
   if _,err := pathModel.Create(); err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("添加接口失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"添加失败"})
     return
   }
@@ -111,6 +110,7 @@ func UpdatePath (c *gin.Context){
   pathModel.PathID = pathId
 
   if err := pathModel.Update(); err != nil {
+    lgr.Errorf("修改接口失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"修改失败"})
     return
   }
@@ -139,6 +139,7 @@ func DeletePath(c *gin.Context)  {
     pathModel models.Path
   )
   if err := pathModel.Delete(pathIds); err != nil {
+    lgr.Errorf("删除接口失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"删除失败"})
     return
   }
@@ -161,7 +162,7 @@ func PathList(c *gin.Context)  {
 
   paths, err := pathModel.GetTreePaths()
   if err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("获取接口列表失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"获取数据失败"})
     return
   }

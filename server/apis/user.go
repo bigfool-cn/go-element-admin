@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"log"
-	"element-admin-api/models"
-	"element-admin-api/utils"
+	"go-element-admin/models"
+	"go-element-admin/utils"
   "strconv"
 )
 
@@ -49,7 +49,8 @@ func UserLogin(c *gin.Context) {
     }
 		token,err := utils.Jwt.GenerateToken(user.UserId,user.UserName,roles)
 		if err != nil {
-			c.JSON(400, Res{Code:400,Message:"生成token失败"})
+      lgr.Errorf("生成token失败: %v",err.Error())
+      c.JSON(400, Res{Code:400,Message:"生成token失败"})
 			return
 		}
 
@@ -84,7 +85,8 @@ func UserInfo(c * gin.Context) {
   }
   userRole, err := userModel.GetUserByUserId(userId.(int64))
 	if err != nil {
-		c.JSON(400, Res{Code:400,Message:"获取失败"})
+    lgr.Errorf("获取用户信息失败: %v",err.Error())
+    c.JSON(400, Res{Code:400,Message:"获取失败"})
 		return
 	} else {
 		var (
@@ -112,7 +114,7 @@ func UserInfo(c * gin.Context) {
 
 		menus, err := menuModel.GetTreeMenuByIds(_menuIds.([]int64))
 		if err != nil {
-			log.Println(err.Error())
+      lgr.Errorf("获取用户信息失败: %v",err.Error())
 			c.JSON(400, Res{Code:400,Message:"获取失败"})
 			return
 		}
@@ -168,7 +170,7 @@ func CreateUser(c *gin.Context)  {
   userModel.Status   = userForm.Status
   userModel.Password = utils.MD5(userForm.Password)
   if err := userModel.Create(); err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("添加用户失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"添加失败"})
     return
   }
@@ -225,7 +227,7 @@ func UpdateUser(c *gin.Context)  {
   userModel.UserName = userForm.UserName
   userModel.Status = userForm.Status
   if err := userModel.Update(); err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("更新用户失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"修改失败"})
     return
   }
@@ -273,7 +275,7 @@ func UpdatePwdUser(c *gin.Context)  {
   userModel.UserId = userId
   newPassword := utils.MD5(userPwdForm.Password)
   if err := userModel.UpdatePwd(newPassword); err != nil {
-    log.Println(err.Error())
+    lgr.Errorf("修改用户密码失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"修改失败"})
     return
   }
@@ -301,6 +303,7 @@ func DeleteUser(c *gin.Context)  {
     userModel models.User
   )
   if err := userModel.Delete(userIds); err != nil {
+    lgr.Errorf("删除用户失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"删除失败"})
     return
   }
@@ -329,6 +332,7 @@ func UserList(c *gin.Context)  {
   userName := c.DefaultQuery("user_name","")
   status, _ := strconv.Atoi(c.DefaultQuery("status","-1"))
   if user, count, err = userModel.GetUserPage(pageSize,pageIndex,userName,status); err != nil {
+    lgr.Errorf("获取用户列表失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"获取失败"})
     return
   }
@@ -361,6 +365,7 @@ func UserLogList(c *gin.Context)  {
   pageIndex, _ := strconv.Atoi(c.DefaultQuery("page","1"))
   date := c.QueryArray("date[]")
   if userLog, count, err = userLogModel.GetUserLogPage(pageSize,pageIndex,date); err != nil {
+    lgr.Errorf("添加登录日志列表失败: %v",err.Error())
     c.JSON(400,Res{Code:400,Message:"获取失败"})
     return
   }
@@ -392,7 +397,8 @@ func DeleteUserLog(c *gin.Context)  {
    userLogModel models.UserLog
   )
   if err := userLogModel.Delete(userLogIds); err != nil {
-   c.JSON(400,Res{Code:400,Message:"删除失败"})
+    lgr.Errorf("删除登录日志失败: %v",err.Error())
+    c.JSON(400,Res{Code:400,Message:"删除失败"})
    return
   }
 

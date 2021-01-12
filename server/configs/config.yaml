@@ -1,14 +1,15 @@
 application:
-  env: dev
-  host: 127.0.0.1
-  isinit: false
-  jwtsecret: go-vue.usenav.com
-  name: go-element-admin-api
+  name: go-element-admin
+  host: 0.0.0.0
   port: 8001
+  jwtsecret: 7a8010aed1454231d488a0e19c40be4a
+  logpath: /go-element-admin/logs
+  debug: false
 database:
   database: go-element-admin
   dbtype: mysql
   host: 127.0.0.1
-  password: 12345678
   port: 3306
   username: root
+  password: 123456
+
