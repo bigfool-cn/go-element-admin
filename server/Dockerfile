@@ -1,12 +1,5 @@
 FROM golang:alpine as builder
 
-# MAINTAINER
-LABEL name="go-element-admin"
-LABEL version="1.0.1"
-LABEL author="bigfool <1063944784@qq.com>"
-LABEL maintainer="bigfool <1063944784@qq.com>"
-LABEL description="go-element-admin application"
-
 # 开启Go Module, 设置GO Proxy代理
 ENV GO111MODULE=on \
     GOPROXY=https://goproxy.cn,direct
@@ -34,7 +27,14 @@ RUN chmod +x /go-element-admin/server
 
 FROM alpine
 
-# 复制builder相关文件到基础镜像alipine
+# MAINTAINER
+LABEL name="go-element-admin"
+LABEL version="1.0.1"
+LABEL author="bigfool <1063944784@qq.com>"
+LABEL maintainer="bigfool <1063944784@qq.com>"
+LABEL description="go-element-admin application"
+
+# 复制builder相关文件到基础镜像alpine
 COPY --from=builder /go-element-admin/configs/config.yaml /go-element-admin/configs/config.yaml
 COPY --from=builder /go-element-admin/server /go-element-admin
 
