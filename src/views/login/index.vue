@@ -173,6 +173,7 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+  background: url(~@/assets/pay_wechat.png);
   .el-input {
     display: inline-block;
     height: 47px;
